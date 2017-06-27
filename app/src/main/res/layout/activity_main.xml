@@ -10,55 +10,70 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="332dp"
-        android:background="#ffffff"
-        android:id="@+id/ImageContainer">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/imageView"
-            android:src="@drawable/test_image"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:clickable="true"
-        android:onClick="processImage"
-        android:background="#167865"
-        android:id="@+id/OCRButtonContainer">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Run OCR"
-            android:id="@+id/OCRbutton"
-            android:textSize="18dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:clickable="true"
-            android:onClick="processImage"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#e4e3e3"
-        android:id="@+id/OCRTextContainer">
+        android:background="#ffffff"
+        android:id="@+id/CameraContainer">
 
-        <TextView
+        <com.imperialsoupgmail.tesseractexample.AutoFitTextureView
+            android:id="@+id/texture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OCR Text will appear here"
-            android:id="@+id/OCRTextView"
-            android:textSize="18dp"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:background="#dedede"
-            android:textColor="#a3a3a3" />
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true" />
+
+        <RelativeLayout
+            android:id="@+id/OCRTextContainer"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="#e4e3e3"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
+
+            <TextView
+                android:id="@+id/OCRTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#dedede"
+                android:text="OCR Text will appear here"
+                android:textColor="#a3a3a3"
+                android:textSize="18dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="12dp" />
+
+            <RelativeLayout
+                android:id="@+id/OCRButtonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="#167865"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/OCRbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="processImage"
+                    android:text="Run OCR"
+                    android:textSize="18dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="29dp" />
+
+                <Button
+                    android:id="@+id/scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/OCRbutton"
+                    android:layout_alignBottom="@+id/OCRbutton"
+                    android:layout_centerHorizontal="true"
+                    android:text="scan" />
+            </RelativeLayout>
+        </RelativeLayout>
+
     </RelativeLayout>
+
 </LinearLayout>
