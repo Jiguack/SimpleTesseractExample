@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.imperialsoupgmail.tesseractexample;
+package com.spacepalm.meidreader;
 
 import android.content.Context;
 import android.util.AttributeSet;

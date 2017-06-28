@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.imperialsoupgmail.tesseractexample;
+package com.spacepalm.meidreader;
 
 import android.Manifest;
 import android.app.Activity;
@@ -78,6 +78,7 @@ import static java.nio.ByteBuffer.allocate;
 public class Camera2BasicFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
 
+    public static MainActivity mMainActivity;
     /**
      * Conversion from screen rotation to JPEG orientation.
      */
@@ -232,8 +233,6 @@ public class Camera2BasicFragment extends Fragment
      * An {@link ImageReader} that handles still image capture.
      */
     private ImageReader mImageReader;
-    private int displayWidth;
-    private int displayHeight;
 
     /**
      * This is the output file for our picture.
@@ -249,7 +248,8 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), displayWidth, displayHeight, mFile, mFileResized));
+
+            mBackgroundHandler.post(new ImageSaver(reader.acquireLatestImage(), mFile, mFileResized));
         }
 
     };
@@ -269,7 +269,7 @@ public class Camera2BasicFragment extends Fragment
      *
      * @see #mCaptureCallback
      */
-    private int mState = STATE_PREVIEW;
+    public int mState = STATE_PREVIEW;
 
     /**
      * A {@link Semaphore} to prevent the app from exiting before closing the camera.
@@ -301,6 +301,7 @@ public class Camera2BasicFragment extends Fragment
                 case STATE_WAITING_LOCK: {
                     Integer afState = result.get(CaptureResult.CONTROL_AF_STATE);
                     if (afState == null) {
+
                         captureStillPicture();
                     } else if (CaptureResult.CONTROL_AF_STATE_FOCUSED_LOCKED == afState ||
                             CaptureResult.CONTROL_AF_STATE_NOT_FOCUSED_LOCKED == afState) {
@@ -309,6 +310,7 @@ public class Camera2BasicFragment extends Fragment
                         if (aeState == null ||
                                 aeState == CaptureResult.CONTROL_AE_STATE_CONVERGED) {
                             mState = STATE_PICTURE_TAKEN;
+
                             captureStillPicture();
                         } else {
                             runPrecaptureSequence();
@@ -331,6 +333,7 @@ public class Camera2BasicFragment extends Fragment
                     Integer aeState = result.get(CaptureResult.CONTROL_AE_STATE);
                     if (aeState == null || aeState != CaptureResult.CONTROL_AE_STATE_PRECAPTURE) {
                         mState = STATE_PICTURE_TAKEN;
+
                         captureStillPicture();
                     }
                     break;
@@ -520,10 +523,7 @@ public class Camera2BasicFragment extends Fragment
                         Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                         new CompareSizesByArea());
                 mImageReader = ImageReader.newInstance(largest.getWidth(), largest.getHeight(),
-                        ImageFormat.JPEG, /*maxImages*/10);
-
-                displayWidth = largest.getWidth();
-                displayHeight = largest.getHeight();
+                        ImageFormat.JPEG, /*maxImages*/20);
 
                 mImageReader.setOnImageAvailableListener(
                         mOnImageAvailableListener, mBackgroundHandler);
@@ -846,7 +846,8 @@ public class Camera2BasicFragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
+                    //showToast("Saved: " + mFile);
+                    showToast("OK");
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
                 }
@@ -898,19 +899,10 @@ public class Camera2BasicFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.scan: {
+                mMainActivity.handler.obtainMessage(MainActivity.TAKE_PICTURE).sendToTarget();
                 takePicture();
                 break;
             }
-//            case R.id.info: {
-//                Activity activity = getActivity();
-//                if (null != activity) {
-//                    new AlertDialog.Builder(activity)
-//                            .setMessage(R.string.intro_message)
-//                            .setPositiveButton(android.R.string.ok, null)
-//                            .show();
-//                }
-//                break;
-//            }
         }
     }
 
@@ -924,7 +916,7 @@ public class Camera2BasicFragment extends Fragment
     /**
      * Saves a JPEG {@link Image} into the specified {@link File}.
      */
-    private static class ImageSaver implements Runnable {
+    private class ImageSaver implements Runnable {
 
         /**
          * The JPEG image
@@ -935,21 +927,16 @@ public class Camera2BasicFragment extends Fragment
          */
         private final File mFile;
         private final File mFileResized;
-
-        private int mWidth;
-        private int mHeight;
+        private Camera2BasicFragment mCam;
 
         public Bitmap bitmap = null;
 
-        public ImageSaver(Image image, int width, int height, File file, File file2) {
+        public ImageSaver(Image image, File file, File file2) {
             mImage = image;
             mFile = file;
             mFileResized = file2;
-            mWidth = width;
-            mHeight = height;
+
         }
-
-
 
         public Bitmap resizeBitmapImage(Bitmap source, int maxResolution)
         {
@@ -994,27 +981,27 @@ public class Camera2BasicFragment extends Fragment
 
         @Override
         public void run() {
-            ByteBuffer buffer = null;
-            ByteBuffer buffer2 = null;
+            ByteBuffer buffer;
+            ByteBuffer buffer2;
 
             FileOutputStream output = null;
 
             try {
-                output = new FileOutputStream(mFile);
                 buffer = mImage.getPlanes()[0].getBuffer();
                 buffer2 = clone(buffer);
 
                 byte[] bytes = new byte[buffer.remaining()];
                 buffer.get(bytes);
 
-                output.write(bytes);
+//                output = new FileOutputStream(mFile);
+//                output.write(bytes);
 
                 byte[] bytesForResize = new byte[buffer2.remaining()];
                 buffer2.get(bytesForResize);
                 bitmap = BitmapFactory.decodeByteArray(bytesForResize, 0, bytesForResize.length);
-                bitmap = resizeBitmapImage(bitmap, 700);
+                bitmap = resizeBitmapImage(bitmap, 500);
 
-            } catch (IOException | NullPointerException e) {
+            } catch (/*IOException |*/ NullPointerException e) {
                 e.printStackTrace();
             } finally {
                 if (mImage != null)
@@ -1028,17 +1015,16 @@ public class Camera2BasicFragment extends Fragment
                 }
             }
 
+//            try {
+//                final FileOutputStream filestream = new FileOutputStream(mFileResized);
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 0, filestream);
+//            } catch (IOException | NullPointerException e) {
+//                e.printStackTrace();
+//            }
 
-
-            try {
-                final FileOutputStream filestream = new FileOutputStream(mFileResized);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 0, filestream);
-            } catch (IOException | NullPointerException e) {
-                e.printStackTrace();
-            }
-            MainActivity.image = bitmap;
+            String meid = mMainActivity.processImage(bitmap);
+            mMainActivity.handler.obtainMessage(MainActivity.UPDATE_MEID, meid).sendToTarget();
         }
-
     }
 
     /**

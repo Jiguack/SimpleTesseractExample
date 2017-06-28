@@ -8,70 +8,51 @@
     tools:context=".MainActivity"
     android:weightSum="1">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/scan"
+        android:layout_alignParentEnd="true"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
     <RelativeLayout
+        android:id="@+id/CameraContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:id="@+id/CameraContainer">
+        android:background="#ffffff">
 
-        <com.imperialsoupgmail.tesseractexample.AutoFitTextureView
+        <com.spacepalm.meidreader.AutoFitTextureView
             android:id="@+id/texture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/OCRTextContainer" />
 
         <RelativeLayout
             android:id="@+id/OCRTextContainer"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="#e4e3e3"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:background="#e4e3e3"
+            android:visibility="visible">
 
-            <TextView
-                android:id="@+id/OCRTextView"
+            <Button
+                android:id="@+id/scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#dedede"
-                android:text="OCR Text will appear here"
-                android:textColor="#a3a3a3"
-                android:textSize="18dp"
+                android:text="scan"
+                android:visibility="visible"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="12dp" />
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true" />
 
-            <RelativeLayout
-                android:id="@+id/OCRButtonContainer"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="#167865"
-                android:clickable="true">
-
-                <TextView
-                    android:id="@+id/OCRbutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:onClick="processImage"
-                    android:text="Run OCR"
-                    android:textSize="18dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="29dp" />
-
-                <Button
-                    android:id="@+id/scan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/OCRbutton"
-                    android:layout_alignBottom="@+id/OCRbutton"
-                    android:layout_centerHorizontal="true"
-                    android:text="scan" />
-            </RelativeLayout>
         </RelativeLayout>
 
     </RelativeLayout>
