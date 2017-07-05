@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //send to server
                         sender.send("MEID", meid);
+
                         v.vibrate(500);
                     }
                     break;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         sender.exit();
     }
 

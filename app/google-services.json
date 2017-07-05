@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "618891867508",
+    "firebase_url": "https://imeidata-1bc61.firebaseio.com",
+    "project_id": "imeidata-1bc61",
+    "storage_bucket": "imeidata-1bc61.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618891867508:android:a6dbf9145b70a9e2",
+        "android_client_info": {
+          "package_name": "com.spacepalm.meidreader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "618891867508-to9fa0os8thdh93oo4k3r2ssgpv9fnpi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxNne4LVswtgKP671FqqKStd9wCVeGu3M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
