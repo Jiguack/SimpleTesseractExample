@@ -985,6 +985,10 @@ public class Camera2BasicFragment extends Fragment
             ByteBuffer buffer2;
 
             FileOutputStream output = null;
+            if (mImage == null) {
+                Log.d(TAG, "image is null");
+                return;
+            }
 
             try {
                 buffer = mImage.getPlanes()[0].getBuffer();
